@@ -1,7 +1,7 @@
 export const BASE_HREF = "";
 
 // API endpoint for retrieving the attendees list, joining the room, and ending the room
-export const CHIME_ROOM_API = "";
+export const CHIME_ROOM_API = "https://m4hnwz72q4.execute-api.us-west-2.amazonaws.com/Prod/";
 
 // Chime-SDK allows up to 16 attendee videos
 export const CHIME_ROOM_MAX_ATTENDEE = 16;
@@ -10,7 +10,7 @@ export const CHIME_ROOM_MAX_ATTENDEE = 16;
 export const DEFAULT_VIDEO_STREAM = "https://fcc3ddae59ed.us-west-2.playback.live-video.net/api/video/v1/us-west-2.893648527354.channel.DmumNckWFTqz.m3u8";
 
 // Default Chat websocket link
-export const CHAT_WEBSOCKET = "";
+export const CHAT_WEBSOCKET = "wss://v8plshz5z6.execute-api.us-west-2.amazonaws.com/Prod";
 
 // Chime-SDK logging level: INFO, WARN, ERROR, DEBUG
 export const CHIME_LOG_LEVEL = 'WARN';

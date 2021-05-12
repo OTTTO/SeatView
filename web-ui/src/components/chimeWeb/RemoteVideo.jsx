@@ -36,7 +36,8 @@ class RemoteVideo extends Component {
       videoEnabled,
       name,
       muted,
-      videoElement
+      videoElement,
+      host
     } = this.props;
     // always show metadata when participant is muted or cam is off
     const showMeta = this.state.showMeta || muted || !videoEnabled;
@@ -45,9 +46,15 @@ class RemoteVideo extends Component {
     const micMuteCls = muted ? 'controls__btn--mic_on' : 'controls__btn--mic_off';
     const metaCls =  showMeta ? '' : ' cam__meta--hide';
     const videoId = `video_${attendeeId}`;
-    return(
 
-        <div className={`cam${camClass}`} key={attendeeId} onMouseEnter={this.handleMouseEnter.bind(this)} onMouseLeave={this.handleMouseLeave.bind(this)}>
+    let style = {};
+
+    if (host) {
+      Object.assign(style, {height:'30%', margin:'1rem'})
+    }
+
+    return(        
+        <div className={`cam${camClass}`} key={attendeeId} onMouseEnter={this.handleMouseEnter.bind(this)} onMouseLeave={this.handleMouseLeave.bind(this)} style={style}>
           <div className="cam__preview">
             <div className="video-container pos-relative">
               <video ref={videoElement} className="attendee_cam remote-attendee" id={videoId} />

@@ -15,20 +15,24 @@ class LocalVideo extends Component {
   }
 
   rosterCallback = (newRoster) => {
-
+    //console.log("ROSTER CALLBACK CALL")
     let attendeeId;
     for (attendeeId in newRoster) {
+
+      //console.log(this.props.joinInfo);
 
       // Exclude others
       if (attendeeId !== this.props.joinInfo.Attendee.AttendeeId) {
         continue;
       }
 
+
       this.setState({ muted: newRoster[attendeeId].muted });
     }
   };
 
   componentDidMount() {
+    //console.log("DID MOUNT")
     // Hide meta info after 2 seconds
     setTimeout(() => {
       this.setState({
@@ -60,6 +64,7 @@ class LocalVideo extends Component {
   }
 
   componentWillUnmount() {
+    //console.log("UNMOUNT")
     this.props.chime.unsubscribeFromRosterUpdate(this.rosterCallback);
   }
 

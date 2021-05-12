@@ -45,7 +45,7 @@ const getMeeting = async(meetingTitle) => {
     return null;
   }
   const meetingData = JSON.parse(result.Item.Data.S);
-  meetingData.PlaybackURL = result.Item.PlaybackURL.S;
+  //meetingData.PlaybackURL = result.Item.PlaybackURL.S;
   try {
     await chime.getMeeting({
       MeetingId: meetingData.Meeting.MeetingId
@@ -57,12 +57,11 @@ const getMeeting = async(meetingTitle) => {
   return meetingData;
 };
 
-const putMeeting = async(title, playbackURL, meetingInfo) => {
+const putMeeting = async(title, meetingInfo) => {
   await ddb.putItem({
     TableName: MEETINGS_TABLE_NAME,
     Item: {
-      'Title': { S: title },
-      'PlaybackURL': { S: playbackURL },
+      'Title': { S: title },      
       'Data': { S: JSON.stringify(meetingInfo) },
       'TTL': {
         N: '' + oneDayFromNow
@@ -412,31 +411,25 @@ exports.join = async(event, context, callback) => {
     response.body = "Must provide title and name";
     callback(null, response);
     return;
-  }
-  
-  if (payload.role === 'host' && !payload.playbackURL) {
-    console.log("join > missing required field: Must provide playbackURL");
-    response.statusCode = 400;
-    response.body = "Must provide playbackURL";
-    callback(null, response);
-    return;
-  }
+  } 
 
   const title = simplifyTitle(payload.title);
   const name = payload.name;
   const region = payload.region || 'us-east-1';
+  let externalUserId = uuid();
   let meetingInfo = await getMeeting(title);
+  let newMeeting = false;
 
   // If meeting does not exist and role equal to "host" then create meeting room
   if (!meetingInfo && payload.role === 'host') {
+    newMeeting = true;
     const request = {
       ClientRequestToken: uuid(),
       MediaRegion: region
     };
     console.info('join event > Creating new meeting: ' + JSON.stringify(request, null, 2));
-    meetingInfo = await chime.createMeeting(request).promise();
-    meetingInfo.PlaybackURL = payload.playbackURL;
-    await putMeeting(title, payload.playbackURL, meetingInfo);
+    meetingInfo = await chime.createMeeting(request).promise();    
+    await putMeeting(title, meetingInfo);
   }
 
   console.info("join event > meetingInfo:", JSON.stringify(meetingInfo, null, 2));
@@ -444,17 +437,22 @@ exports.join = async(event, context, callback) => {
   console.info('join event > Adding new attendee');
   const attendeeInfo = (await chime.createAttendee({
       MeetingId: meetingInfo.Meeting.MeetingId,
-      ExternalUserId: uuid(),
+      ExternalUserId: externalUserId,
     }).promise());
 
   console.info("join event > attendeeInfo:", JSON.stringify(attendeeInfo, null, 2));
 
   putAttendee(title, attendeeInfo.Attendee.AttendeeId, name);
+  if (newMeeting) {
+    meetingInfo.Meeting.HostId = attendeeInfo.Attendee.AttendeeId;
+    await putMeeting(title, meetingInfo);
+  }
 
   const joinInfo = {
     JoinInfo: {
       Title: title,
-      PlaybackURL: meetingInfo.PlaybackURL,
+      //PlaybackURL: meetingInfo.PlaybackURL,
+      //HostId: externalUserId,
       Meeting: meetingInfo.Meeting,
       Attendee: attendeeInfo.Attendee
     },

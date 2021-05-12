@@ -59,11 +59,13 @@ class Meeting extends Component {
         this.role = ssData.role;
 
         if (!ssData.joinInfo) {
-          this.joinInfo = await this.props.chime.createRoom(this.role, this.username, this.title, ssData.playbackURL);
+
+          this.joinInfo = await this.props.chime.createRoom(this.role, this.username, this.title);          
           const data = {
             ...ssData,
             joinInfo: this.joinInfo
           }
+          console.log(data);
           sessionStorage.setItem(this.ssName, JSON.stringify(data));
           this.playbackURL = this.joinInfo.PlaybackURL;
         } else {
@@ -79,7 +81,7 @@ class Meeting extends Component {
           audioVideoDidStop: async (sessionStatus) => {
             if (sessionStatus.statusCode() === MeetingSessionStatusCode.AudioCallEnded) {
               const whereTo = `${this.baseHref}/${this.role === 'host' ? '' : 'end'}`;
-              this.props.chime.leaveRoom(this.role === 'host');
+              this.props.chime.leaveRoom(this.role === 'host')              
               this.props.history.push(whereTo);
             }
           }
@@ -93,6 +95,7 @@ class Meeting extends Component {
       }
     };
     start();
+    console.log(this.joinInfo)
   }
 
   /*
@@ -150,7 +153,13 @@ class Meeting extends Component {
     if(this.state.meetingStatus !== 'Success') {
       return;
     }
-
+  //{this.joinInfo.Attendee.ExternalUserId === this.joinInfo.HostId ? : }
+  /*
+  <VideoPlayer
+    setMetadataId={this.setMetadataId}
+    videoStream={this.playbackURL}
+  />
+  */
     return (
       <div className="app-grid" onClick={this.handleClick}>
         <div className="main-stage">
@@ -159,15 +168,18 @@ class Meeting extends Component {
             chime={this.props.chime}
             joinInfo={this.joinInfo}
           />
+          {this.joinInfo.Attendee.AttendeeId !== this.joinInfo.Meeting.HostId ? 
           <RemoteVideoGroup
             chime={this.props.chime}
             joinInfo={this.joinInfo}
-          />
-          </div>
-          <VideoPlayer
-            setMetadataId={this.setMetadataId}
-            videoStream={this.playbackURL}
-          />
+            top={true}
+          /> : ''}
+          </div>          
+          <RemoteVideoGroup
+            chime={this.props.chime}
+            joinInfo={this.joinInfo}
+            top={false}
+         />
           <Controls
             chime={this.props.chime}
             baseHref={this.baseHref}

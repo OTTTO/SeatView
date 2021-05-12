@@ -48,7 +48,7 @@ export default class ChimeSdkWrapper {
     console.error(error);
   }
 
-  async createRoom(role, name, title, playbackURL, region) {
+  async createRoom(role, name, title, region) {
     if (!name || !title || !role) {
       console.error(
            `role=${role} name=${name} title=${title} must exist`
@@ -59,7 +59,6 @@ export default class ChimeSdkWrapper {
     const payload = {
       name,
       title,
-      playbackURL,
       role
     };
 

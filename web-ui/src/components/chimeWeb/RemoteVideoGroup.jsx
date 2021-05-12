@@ -154,9 +154,12 @@ class RemoteVideoGroup extends Component {
   }
 
   render() {
+    //console.log(this.state.roster);
     return(
-      <React.Fragment>
-        {this.state.roster.map((attendee, index) => {
+     !this.props.top && this.props.joinInfo.Attendee.AttendeeId === this.props.joinInfo.Meeting.HostId
+     ? <div className='viewers' style={{display:'flex', 'flex-wrap':'wrap', 'align-content':'flex-start'}}>
+     {this.state.roster.map((attendee, index) => {
+          //console.log(attendee.attendeeId);          
           return (
             <RemoteVideo
               chime={this.props.chime}
@@ -166,6 +169,26 @@ class RemoteVideoGroup extends Component {
               name={attendee.name}
               muted={attendee.muted}
               videoElement={attendee.videoElement}
+              host={true}
+            />)
+        })}
+      </div>
+     : <React.Fragment>
+        {this.state.roster.map((attendee, index) => {
+          return (this.props.top && attendee.attendeeId === this.props.joinInfo.Meeting.HostId) ? '' :
+          (!this.props.top            
+            && this.props.joinInfo.Attendee.AttendeeId !== this.props.joinInfo.Meeting.HostId
+            && attendee.attendeeId !== this.props.joinInfo.Meeting.HostId) ? '' :
+          (
+            <RemoteVideo
+              chime={this.props.chime}
+              key={index}
+              attendeeId={attendee.attendeeId}
+              videoEnabled={attendee.videoEnabled}
+              name={attendee.name}
+              muted={attendee.muted}
+              videoElement={attendee.videoElement}
+              host={false}
             />
           );
         })}
