@@ -8,7 +8,6 @@ import {
 } from 'amazon-chime-sdk-js';
 
 // Components
-import VideoPlayer from '../videoPlayer/VideoPlayer';
 import Chat from '../chat/Chat';
 import Controls from './Controls';
 import Settings from './Settings';
