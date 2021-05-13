@@ -59,7 +59,7 @@
 
 /* Chat */
 .chat {
-  background: var(--color--tertiary);
+  background: #0f5ba6;
   display: grid;
   grid-template-rows: var(--chat-row-template);
 }
