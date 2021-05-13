@@ -56,6 +56,7 @@ class Meeting extends Component {
         this.username = ssData.username;
         this.title = ssData.title;
         this.role = ssData.role;
+        //console.log("ROLE: " + this.role);
 
         if (!ssData.joinInfo) {
 
@@ -185,7 +186,7 @@ class Meeting extends Component {
             ssName={this.ssName}
             title={this.title}
             openSettings={this.openSettings}
-            role={this.role}
+            role={this.joinInfo.Attendee.AttendeeId === this.joinInfo.Meeting.HostId ? 'host' : 'attendee'}
             history={this.props.history}
             myVideoElement={this.myVideoElement}
           />

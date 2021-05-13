@@ -17,6 +17,7 @@ class Controls extends Component {
   }
 
   componentDidMount() {
+    console.log(this.props.role);
     this.props.chime.audioVideo.realtimeSubscribeToMuteAndUnmuteLocalAudio(
       this.callback
     );
