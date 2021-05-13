@@ -78,8 +78,8 @@ class Welcome extends Component {
 
           <div className="welcome__intro">
             <div className="intro__inner formatted-text">
-              <h1>Amazon IVS with ChimeSDK</h1>
-              <h3>Create or join rooms, and watch Amazon IVS streams with anyone.</h3>
+              <h1>Seat View by Spark Compass</h1>
+              <h3>Create or join rooms, and watch live streams with anyone.</h3>
             </div>
           </div>
 
@@ -89,9 +89,8 @@ class Welcome extends Component {
               <form action="">
                 <fieldset className="mg-b-2">
                   <input className="mg-b-2" type="text" placeholder="Your name" value={username} ref={this.inputRef} onChange={this.handleNameChange} />
-                  <input type="text" placeholder="Room name" value={title} onChange={this.handleRoomChange} />
-                  <input type="text" placeholder="Playback URL" value={playbackURL} onChange={this.handlePlaybackURLChange} />
-                  <button className="mg-t-2 btn btn--primary" disabled={createRoomDisabled} onClick={this.handleCreateRoom} >Create room</button>
+                  <input type="text" placeholder="Room name" value={title} onChange={this.handleRoomChange} />                  
+                  <button className="mg-t-2 btn btn--primary" disabled={createRoomDisabled} onClick={this.handleCreateRoom} >Create/join room</button>
                 </fieldset>
               </form>
             </div>
