@@ -157,7 +157,7 @@ class RemoteVideoGroup extends Component {
     //console.log(this.state.roster);
     return(
      !this.props.top && this.props.joinInfo.Attendee.AttendeeId === this.props.joinInfo.Meeting.HostId
-     ? <div className='viewers' style={{display:'flex', 'flex-wrap':'wrap', 'align-content':'flex-start'}}>
+     ? <div className='viewers' style={{display:'flex', 'flexWrap':'wrap', 'alignContent':'flex-start'}}>
      {this.state.roster.map((attendee, index) => {
           //console.log(attendee.attendeeId);          
           return (
